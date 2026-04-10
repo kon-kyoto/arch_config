@@ -30,8 +30,8 @@ apply_theme() {
   local random_pos=${positions[$RANDOM % ${#positions[@]}]}
 
   # Apply wallpaper with random grow origin
-  swww init &>/dev/null || true
-  swww img "$wallpaper_path" \
+  awww init &>/dev/null || true
+  awww img &>/dev/null "$wallpaper_path" \
     --transition-type grow \
     --transition-fps 60 \
     --transition-duration 2.0 \
