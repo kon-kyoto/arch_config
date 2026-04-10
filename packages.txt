@@ -1,10 +1,3 @@
-# Базовые системы
-base
-base-devel
-linux
-linux-firmware
-amd-ucode
-efibootmgr
 grub
 sudo
 man-db
@@ -12,15 +5,10 @@ git
 wget
 unzip
 zip
-bash
 fish
-
-# Редакторы
 nano
 neovim
 vim
-
-# Сеть (только iwd)
 iwd
 networkmanager
 dhcpcd
@@ -28,8 +16,6 @@ wireless_tools
 wpa_supplicant
 dnsmasq
 iptables-nft
-
-# Hyprland/Wayland
 hyprland
 hyprlock
 uwsm
@@ -47,16 +33,12 @@ xdg-utils
 qt5-wayland
 qt6-wayland
 qt6-virtualkeyboard
-
-# Xorg fallback
 xorg-server
 xorg-xinit
 xf86-video-amdgpu
 xf86-video-ati
 vulkan-radeon
 vulkan-tools
-
-# Шрифты (все)
 otf-atkinsonhyperlegiblemono-nerd
 otf-aurulent-nerd
 otf-codenewroman-nerd
@@ -124,8 +106,6 @@ ttf-ubuntu-mono-nerd
 ttf-ubuntu-nerd
 ttf-victor-mono-nerd
 ttf-zed-mono-nerd
-
-# Графические приложения
 thunar
 gimp
 firefox
@@ -148,24 +128,16 @@ kolourpaint
 kruler
 skanlite
 svgpart
-
-# Сервисы (основное)
-bluez
-bluez-utils
 pulseaudio
 colord-kde
-power-profiles-daemon
 smartmontools
 sof-firmware
 zram-generator
 libvirt
-
-# Разработка (базовое)
 clang
 gdb
 python-pip
 python-setuptools
 nodejs
 npm
-
 happ-desktop-bin

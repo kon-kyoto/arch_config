@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # Цвета
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -29,34 +27,84 @@ if [[ ! -f "$PACKAGE_LIST" ]]; then
     echo -e "${RED}Error: $PACKAGE_LIST not found!${NC}"
     exit 1
 fi
-if [[ ! -d "$CONFIG" ]]; then
-	echo -e "${RED}Error: $CONFIG not found!${NC}"
-	exit 1
-fi
 
-cp -r "$CONFIG"/* "$HOME/.config/"
-echo -e "${GREEN}✓ Configuration files copied to $HOME/.config/${NC}"
+# Копирование конфигов
+if [[ -d "$CONFIG" ]]; then
+    mkdir -p "$HOME/.config"
+    cp -r "$CONFIG"/* "$HOME/.config/" 2>/dev/null
+    echo -e "${GREEN}✓ Configuration files copied to $HOME/.config/${NC}"
+else
+    echo -e "${YELLOW}Warning: $CONFIG not found, skipping...${NC}"
+fi
 
 # Функция для скачивания strap.sh
 download_strap() {
-    echo -e "${YELLOW}Downloading strap.sh from BlackArch...${NC}"
+    echo -e "${YELLOW}Downloading strap.sh from BlackArch mirrors...${NC}"
     
+    # Список зеркал с strap.sh (в порядке приоритета)
+    local mirrors=(
+        "https://repository.su/blackarch/strap.sh"
+        "https://ftp.halifax.rwth-aachen.de/blackarch/strap.sh"
+        "https://blackarch.unixpeople.org/strap.sh"
+        "https://www.mirrorservice.org/sites/blackarch.org/strap.sh"
+        "http://mirror.yandex.ru/mirrors/blackarch/strap.sh"
+        "https://mirrors.tuna.tsinghua.edu.cn/blackarch/strap.sh"
+        "https://mirrors.ustc.edu.cn/blackarch/strap.sh"
+        "http://mirror.0xem.ma/blackarch/strap.sh"
+        "https://mirror.serverion.com/blackarch/strap.sh"
+        "https://blackarch.org/strap.sh"  # Оригинал в конце
+    )
+    
+    # Проверяем наличие инструментов для загрузки
+    local downloader=""
     if command -v curl &>/dev/null; then
-        curl -k -o "$STRAP" https://blackarch.org/strap.sh
+        downloader="curl -k -s -o"
     elif command -v wget &>/dev/null; then
-        wget --no-check-certificate -O "$STRAP" https://blackarch.org/strap.sh
+        downloader="wget --no-check-certificate -q -O"
     else
         echo -e "${YELLOW}Installing curl...${NC}"
         sudo pacman -S --needed --noconfirm curl
-        curl -k -o "$STRAP" https://blackarch.org/strap.sh
+        downloader="curl -k -s -o"
     fi
     
-    if [[ -f "$STRAP" ]]; then
-        chmod +x "$STRAP"
-        echo -e "${GREEN}✓ strap.sh downloaded successfully${NC}"
-        return 0
+    # Пробуем каждое зеркало
+    local mirror_url=""
+    for mirror in "${mirrors[@]}"; do
+        echo -ne "${BLUE}Testing: $mirror ... ${NC}"
+        
+        # Проверяем доступность зеркала (быстрый тест)
+        if [[ "$downloader" == curl* ]]; then
+            if curl -k -s --connect-timeout 5 --max-time 10 -o /dev/null -w "%{http_code}" "$mirror" | grep -q "200\|302"; then
+                echo -e "${GREEN}OK${NC}"
+                mirror_url="$mirror"
+                break
+            else
+                echo -e "${RED}FAIL${NC}"
+            fi
+        else
+            if wget --no-check-certificate --timeout=5 --tries=1 -q --spider "$mirror" 2>/dev/null; then
+                echo -e "${GREEN}OK${NC}"
+                mirror_url="$mirror"
+                break
+            else
+                echo -e "${RED}FAIL${NC}"
+            fi
+        fi
+    done
+    
+    # Если зеркало найдено, скачиваем
+    if [[ -n "$mirror_url" ]]; then
+        echo -e "${YELLOW}Downloading from: $mirror_url${NC}"
+        if $downloader "$STRAP" "$mirror_url"; then
+            chmod +x "$STRAP"
+            echo -e "${GREEN}✓ strap.sh downloaded successfully${NC}"
+            return 0
+        else
+            echo -e "${RED}✗ Failed to download strap.sh${NC}"
+            return 1
+        fi
     else
-        echo -e "${RED}✗ Failed to download strap.sh${NC}"
+        echo -e "${RED}✗ No working mirrors found!${NC}"
         return 1
     fi
 }
@@ -67,6 +115,7 @@ install_with_progress() {
     local installer="$2"
     local total=$(grep -v '^$' "$file" | grep -v '^#' | wc -l)
     local current=0
+    local failed=0
     
     echo -e "${GREEN}Installing $total packages...${NC}"
     
@@ -77,19 +126,24 @@ install_with_progress() {
         echo -ne "${BLUE}[$percent%]${NC} Installing $package... \r"
         
         if [[ "$installer" == "paru" ]]; then
-            if paru -S --needed --noconfirm --quiet "$package" 2>&1 > /dev/null; then
+            if paru -S --needed --noconfirm "$package" > /dev/null 2>&1; then
                 echo -e "${GREEN}[$percent%] ✓ $package installed${NC}"
             else
                 echo -e "${RED}[$percent%] ✗ Failed: $package${NC}"
+                ((failed++))
             fi
         else
-            if sudo pacman -S --needed --noconfirm --quiet "$package" 2>&1 > /dev/null; then
+            if sudo pacman -S --needed --noconfirm "$package" > /dev/null 2>&1; then
                 echo -e "${GREEN}[$percent%] ✓ $package installed${NC}"
             else
                 echo -e "${RED}[$percent%] ✗ Failed: $package${NC}"
+                ((failed++))
             fi
         fi
     done < "$file"
+    
+    echo -e "${YELLOW}Installation completed with $failed failures${NC}"
+    return 0  # Всегда возвращаем успех, чтобы скрипт продолжался
 }
 
 # Установка AUR хелперов
@@ -110,12 +164,21 @@ fi
 
 # Основная установка
 echo -e "\n${BLUE}=== Installing main packages ===${NC}"
-install_with_progress "$PACKAGE_LIST" "pacman"
+install_with_progress "$PACKAGE_LIST" "paru"
 
 # Темы
 echo -e "\n${BLUE}=== Installing themes ===${NC}"
-[[ -d "CyberGRUB-2077" ]] && (cd CyberGRUB-2077 && sudo bash install.sh > /dev/null 2>&1 && echo -e "${GREEN}✓ CyberGRUB installed${NC}")
-[[ -d "SilentSDDM" ]] && (cd SilentSDDM && sudo bash install.sh > /dev/null 2>&1 && echo -e "${GREEN}✓ SDDM theme installed${NC}")
+if [[ -d "CyberGRUB-2077" && -f "CyberGRUB-2077/install.sh" ]]; then
+    (cd CyberGRUB-2077 && sudo bash install.sh > /dev/null 2>&1 && echo -e "${GREEN}✓ CyberGRUB installed${NC}")
+else
+    echo -e "${YELLOW}⚠ CyberGRUB-2077 not found, skipping${NC}"
+fi
+
+if [[ -d "SilentSDDM" && -f "SilentSDDM/install.sh" ]]; then
+    (cd SilentSDDM && sudo bash install.sh > /dev/null 2>&1 && echo -e "${GREEN}✓ SDDM theme installed${NC}")
+else
+    echo -e "${YELLOW}⚠ SilentSDDM not found, skipping${NC}"
+fi
 
 # Pentest
 read -p "Install pentest OS? [y/N]: " choice
@@ -128,7 +191,7 @@ if [[ "$choice" =~ ^[Yy]$ ]]; then
     fi
     
     # Устанавливаем BlackArch репозиторий
-    if ! grep -q "blackarch" /etc/pacman.conf 2>/dev/null; then
+    if [[ -f "$STRAP" ]] && ! grep -q "blackarch" /etc/pacman.conf 2>/dev/null; then
         echo -e "${YELLOW}Installing BlackArch repository...${NC}"
         sudo bash "$STRAP" > /dev/null 2>&1
         echo -e "${GREEN}✓ BlackArch repository installed${NC}"
@@ -136,8 +199,12 @@ if [[ "$choice" =~ ^[Yy]$ ]]; then
     fi
     
     # Устанавливаем пакеты для пентеста
-    echo -e "\n${BLUE}=== Installing pentest packages ===${NC}"
-    install_with_progress "$BLACK_PACKAGE_LIST" "pacman"
+    if [[ -f "$BLACK_PACKAGE_LIST" ]]; then
+        echo -e "\n${BLUE}=== Installing pentest packages ===${NC}"
+        install_with_progress "$BLACK_PACKAGE_LIST" "pacman"
+    else
+        echo -e "${RED}Error: $BLACK_PACKAGE_LIST not found!${NC}"
+    fi
 fi
 
 echo -e "\n${GREEN}===================================${NC}"

@@ -12,7 +12,7 @@ SHPATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 install_dependencies () {
     if command -v pacman &>/dev/null; then
         echo -e "${grey}Installing dependencies with 'pacman'...${reset}"
-        sudo pacman -S --needed sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
+        sudo pacman -S --noconfirm --needed sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
     elif command -v xbps-install &>/dev/null; then
         echo -e "${grey}Installing dependencies with 'xbps'...${reset}"
         sudo xbps-install sddm qt6-svg qt6-virtualkeyboard qt6-multimedia
