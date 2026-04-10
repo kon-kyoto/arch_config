@@ -201,7 +201,7 @@ if [[ "$choice" =~ ^[Yy]$ ]]; then
     # Устанавливаем пакеты для пентеста
     if [[ -f "$BLACK_PACKAGE_LIST" ]]; then
         echo -e "\n${BLUE}=== Installing pentest packages ===${NC}"
-        install_with_progress "$BLACK_PACKAGE_LIST" "pacman"
+        install_with_progress "$BLACK_PACKAGE_LIST" "paru"
     else
         echo -e "${RED}Error: $BLACK_PACKAGE_LIST not found!${NC}"
     fi
