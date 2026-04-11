@@ -41,44 +41,6 @@ What it does:
 
 ## 📦 Package overview
 
-## 🧠 Tools I actually know & work with
-
-> *"Theory is nice, but I've touched every single one of these."*
-
-### 🔍 Recon & Enumeration
-`nmap` • `arp-scan` • `tcpdump` • `wireshark-cli` • `sherlock`
-
-### 💥 Exploitation & Fuzzing
-`metasploit` • `ffuf` • `wfuzz` • `sqlmap` • `beef` • `hydra`
-
-### 🔐 Password attacks
-`john` • `aircrack-ng` • `hydra`
-
-### 🖥️ Web & services
-`nginx` • `redis` • `fcgiwrap`
-
-### 🧱 Virtualization & sandboxing
-`qemu-full` • `virt-manager` • `libvirt` • `swtpm`
-
-### 🐚 My daily drivers (not pentest, but essential)
-`hyprland` • `kitty` • `yazi` • `btop` • `fastfetch` • `nvim`
-
----
-
-## 📌 How I use them
-
-| Tool | What I do with it |
-|------|-------------------|
-| `nmap` | Network discovery & OS fingerprinting |
-| `metasploit` | Exploit dev & payload delivery |
-| `john` / `hydra` | Password cracking & brute force |
-| `sqlmap` | Automatic SQL injection |
-| `ffuf` / `wfuzz` | Web fuzzing & directory busting |
-| `qemu` + `virt-manager` | Isolated lab environments for malware analysis |
-| `beef` | Browser exploitation hooks |
-
-> 💡 *This list grows every week. I'm constantly adding new tools to my workflow.*
-
 ### 🧰 Core system + Hyprland stack
 - hyprland, hyprlock, uwsm, xdg-desktop-portal-hyprland
 - waybar, wofi, dunst, swww, grim, slurp, swappy
@@ -134,6 +96,8 @@ What it does:
 | `beef` | Browser exploitation hooks |
 
 > 💡 *This list grows every week. I'm constantly adding new tools to my workflow.*
+
+---
 
 ## 🎮 Post‑installation
 
