@@ -105,9 +105,11 @@ download_strap() {
         if $downloader "$STRAP" "$mirror_url"; then
             chmod +x "$STRAP"
             echo -e "${GREEN}✓ strap.sh downloaded successfully${NC}"
+	    rm "$STRAP"
             return 0
         else
             echo -e "${RED}✗ Failed to download strap.sh${NC}"
+	    rm "$STRAP"
             return 1
         fi
     else
