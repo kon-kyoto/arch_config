@@ -219,6 +219,8 @@ if [[ "$choice" =~ ^[Yy]$ ]]; then
     sudo usermod -aG libvirt $USER
 fi
 
+echo "alias newmac='sudo ip link set wlan0 down && sudo ip link set dev wlan0 address \$(openssl rand -hex 6 | sed \"s/\\(..\\)/\\1:/g; s/:$//\") && sudo ip link set wlan0 up && echo \"New MAC: \$(ip link show wlan0 | grep link/ether | awk \"{print \\\$2}\")\"'" >> ~/.bashrc
+
 echo -e "${GREEN}${BOLD}"
 echo "    ██╗  ██╗ █████╗  ██████╗██╗  ██╗    ████████╗██╗  ██╗███████╗"
 echo "    ██║  ██║██╔══██╗██╔════╝██║ ██╔╝    ╚══██╔══╝██║  ██║██╔════╝"
