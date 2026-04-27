@@ -141,3 +141,4 @@ python-setuptools
 nodejs
 npm
 happ-desktop-bin
+obsidian
