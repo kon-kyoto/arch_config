@@ -37,8 +37,10 @@ require("lazy").setup({
     build = ":TSUpdate",
     event = "BufReadPost",
     config = function()
-      vim.defer_fn(function()
-        require("nvim-treesitter.configs").setup({
+      -- Убираем vim.defer_fn и заменяем на правильную загрузку
+      local ok, treesitter = pcall(require, "nvim-treesitter.configs")
+      if ok then
+        treesitter.setup({
           ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "make", "bash", "python" },
           highlight = {
             enable = true,
@@ -49,7 +51,7 @@ require("lazy").setup({
             disable = { "txt", "text" },
           },
         })
-      end, 100)
+      end
     end,
   },
 
