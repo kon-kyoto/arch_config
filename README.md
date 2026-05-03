@@ -1,4 +1,4 @@
-# 🕶️ ARCH-STRIKE – The Pentesting Environment You Didn't Know You Needed
+# 🕷️ ARCH-STRIKE – The Pentesting Environment You Didn't Know You Needed
 
 > "Stay anonymous. Stay dangerous."
 
@@ -14,7 +14,7 @@ This is ARCH-STRIKE – a fully automated, cyberpunk‑styled Arch Linux environ
 - 💻 Daily driving with smooth Hyprland eye candy
 - 🔥 Flexing on your friends with terminal vibes
 
-Everything is powered by Hyprland (Wayland) + BlackArch tools + a truckload of Nerd Fonts.
+Everything is powered by Hyprland (Wayland) + BlackArch tools + carefully selected Nerd Fonts.
 
 ---
 
@@ -48,8 +48,17 @@ What it does:
 - btop, cava, fastfetch, htop, radeontop
 - brightnessctl, polkit-kde-agent, libvirt
 
-### 🔥 Fonts (all Nerd Fonts – you monster)
-- otf-* and ttf-* – JetBrains Mono, FiraCode, Hack, Meslo, Cascadia Code, Iosevka, Ubuntu, Victor Mono, and about 50 more.
+### 🔥 Fonts (carefully curated, not a monster anymore)
+| Font | Purpose |
+|------|---------|
+| `ttf-jetbrains-mono-nerd` | Main daily driver (great ligatures) |
+| `ttf-iosevka-nerd` | Styling for hyprlock / waybar / kitty |
+| `otf-dseg7-classic` | Digital clock font in hyprlock |
+| `ttf-ubuntu-nerd` | Fallback font |
+
+> 📦 **Before:** ~70 fonts / ~500 MB  
+> 📦 **After:** 4 fonts / ~30 MB  
+> Nothing breaks – system fallback handles everything else.
 
 ### 🕵️ Pentest tools (optional – via BlackArch)
 - nmap, tcpdump, wireshark-cli, arp-scan
@@ -59,7 +68,94 @@ What it does:
 
 ---
 
-## 🧠 Tools I actually know & work with
+## 🧩 Waybar Features
+
+| Module | Icon | Action on click |
+|--------|------|-----------------|
+| Power Profile | 󰾆 / 󰾅 / 󰓅 | Toggle power saving/balanced/performance |
+| Bluetooth | 󰂯 / 󰂲 | Shows connection status |
+| Theme Switcher | 🎨 | Change wallpaper (random/next/list) |
+| Clipboard | 📋 | Open cliphist menu |
+
+---
+
+## 🎨 Wofi Styling
+
+| File | Purpose |
+|------|---------|
+| `style.css` | Main Tokyo Night themed menu |
+| `powermenu.css` | Power options (reboot/shutdown/logout) |
+| `gruvbox.css` | Alternative Gruvbox theme |
+
+---
+
+## 🔧 Neovim Configuration
+
+### Key Features
+- Tokyo Night theme with transparency
+- LSP support (clangd for C/C++)
+- DAP debugging (gdb integration)
+- Telescope for fuzzy finding
+- NvimTree file manager
+
+### Hotkeys
+| Key | Action |
+|-----|--------|
+| `<leader> + e` | Toggle file manager |
+| `<leader> + p` | Find files |
+| `Alt + t` | New tab |
+| `Alt + q/e` | Previous/next tab |
+| `Alt + z` | Close tab |
+| `gd` | Go to definition |
+| `F5` | Start debugging |
+
+> 💡 `<leader>` = spacebar
+
+---
+
+## 🐱 Kitty Terminal
+
+### Features
+- Tokyo Night Storm color scheme
+- 0.9 background opacity with blur
+- Iosevka Nerd Font (size 11)
+- Powerline-style tabs
+- Wayland native
+
+### Hotkeys
+| Key | Action |
+|-----|--------|
+| `Ctrl + Shift + C/V` | Copy/Paste |
+| `Ctrl + Shift + T` | New tab |
+| `Ctrl + Tab` | Next tab |
+| `Ctrl + Shift + U/I` | Opacity +/- |
+| `Ctrl + Plus/Minus` | Font size |
+
+---
+
+## 🖥️ Hyprland
+
+### Keybind Quick Reference
+| Key | Action |
+|-----|--------|
+| `SUPER + Q` | Terminal (Kitty) |
+| `SUPER + E` | File manager (Thunar) |
+| `SUPER + B` | Browser (Firefox) |
+| `SUPER + R` | App launcher (Wofi) |
+| `SUPER + G` | Lock screen |
+| `SUPER + H/L/K/J` | Move focus |
+| `SUPER + [1-9,0]` | Switch workspace |
+| `SUPER + SHIFT + R` | Reload Hyprland |
+| `PRINT` | Region screenshot |
+
+### Keyboard Layout
+- Layouts: `us, ru`
+- Toggle: `Alt + Shift`
+- Layout indicator in waybar and hyprlock
+
+---
+
+## 🎯 Tools I actually know & work with
 
 > *"Theory is nice, but I've touched every single one of these."*
 
@@ -72,7 +168,7 @@ What it does:
 ### 🔐 Password attacks
 `john` • `aircrack-ng` • `hydra`
 
-### 🖥️ Web & services
+### 🕸️ Web & services
 `nginx` • `redis` • `fcgiwrap`
 
 ### 🧱 Virtualization & sandboxing
@@ -83,19 +179,23 @@ What it does:
 
 ---
 
-## 📌 How I use them
+## 📂 File structure
 
-| Tool | What I do with it |
-|------|-------------------|
-| `nmap` | Network discovery & OS fingerprinting |
-| `metasploit` | Exploit dev & payload delivery |
-| `john` / `hydra` | Password cracking & brute force |
-| `sqlmap` | Automatic SQL injection |
-| `ffuf` / `wfuzz` | Web fuzzing & directory busting |
-| `qemu` + `virt-manager` | Isolated lab environments for malware analysis |
-| `beef` | Browser exploitation hooks |
-
-> 💡 *This list grows every week. I'm constantly adding new tools to my workflow.*
+```bash
+arch_config/
+├── install.sh                 # Main installer
+├── packages.txt               # Base + Hyprland + fonts (optimized)
+├── pentest-packages.txt       # BlackArch tools (optional)
+├── .config/                   # Your configs (copied to ~/.config/)
+│   ├── hypr/                  # Hyprland & hyprlock configs
+│   ├── waybar/                # Status bar + scripts
+│   ├── kitty/                 # Terminal config
+│   ├── nvim/                  # Neovim config
+│   ├── wofi/                  # Launcher styles
+│   └── ...
+├── CyberGRUB-2077/            # Optional GRUB theme
+└── SilentSDDM/                # Optional SDDM theme
+```
 
 ---
 
@@ -107,43 +207,34 @@ What it does:
 
 ---
 
-## 🧠 Manual tweaks you might want
+## 🔧 Manual tweaks you might want
 
-- Edit ~/.config/hypr/hyprland.conf to adjust keybinds, monitors, animations.
-- Edit ~/.config/waybar/config if you want a different status bar layout.
-- Your pentest tools live in BlackArch – run sudo pacman -S blackarch-<category> to get more.
+- Edit `~/.config/hypr/hyprland.conf` to adjust keybinds, monitors, animations.
+- Edit `~/.config/waybar/config` if you want a different status bar layout.
+- Edit `~/.config/kitty/kitty.conf` to change font size or opacity.
+- Your pentest tools live in BlackArch – run `sudo pacman -S blackarch-<category>` to get more.
 
----
-
-## 🛠️ File structure
-
-```bash
-arch_config/
-├── install.sh                 # Main installer
-├── packages.txt               # Base + Hyprland + fonts
-├── pentest-packages.txt       # BlackArch tools (optional)
-├── .config/                   # Your configs (copied to ~/.config/)
-├── CyberGRUB-2077/            # Optional GRUB theme
-└── SilentSDDM/                # Optional SDDM theme
-```
 ---
 
 ## ❓ FAQ
 
-Q: Why so many fonts?
-A: Because terminal emulators deserve to look like a hacker movie.
+**Q: Why so few fonts now?**
+A: Previously there were 70+ fonts (~500 MB). Now only 4 essential fonts (~30 MB). Nothing breaks – system fallback handles everything, and installation is much faster.
 
-Q: Can I run this on an existing Arch install?
-A: Yes, but back up your dotfiles first. The script overwrites ~/.config/.
+**Q: Can I run this on an existing Arch install?**
+A: Yes, but back up your dotfiles first. The script overwrites `~/.config/`.
 
-Q: BlackArch mirror is slow / down?
+**Q: BlackArch mirror is slow / down?**
 A: The script tries 10+ mirrors automatically. If all fail – check your internet.
 
-Q: I don't want pentest tools.
-A: Just answer n when it asks "Install pentest OS?".
+**Q: I don't want pentest tools.**
+A: Just answer `n` when it asks "Install pentest OS?".
 
-Q: I want MORE tools.
+**Q: I want MORE tools.**
 A: Edit `pentest-packages.txt` or run `sudo pacman -S blackarch-<toolname>`.
+
+**Q: Alt+ shortcuts don't work in Neovim?**
+A: Make sure your terminal passes Alt keys. Kitty works out of the box.
 
 ---
 
