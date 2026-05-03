@@ -117,10 +117,10 @@ vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Закрыть окно
 vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Файловый менеджер" })
 vim.keymap.set("n", "<leader>p", "<cmd>Telescope find_files<CR>", { desc = "Поиск файлов" })
 
--- ========== НАВИГАЦИЯ ПО ТАБАМ ==========
-vim.keymap.set("n", "<leader>v", ":tabnew<CR>", { desc = "Создать новый таб" })
-vim.keymap.set("n", "<leader>g", ":tabnext<CR>", { desc = "Следующий таб" })
-vim.keymap.set("n", "<leader>f", ":tabprevious<CR>", { desc = "Предыдущий таб" })
-vim.keymap.set("n", "<leader>c", ":tabclose<CR>", { desc = "Закрыть текущий таб" })
+-- ========== НАВИГАЦИЯ ПО ТАБАМ (Alt + ...) ==========
+vim.keymap.set("n", "<A-t>", ":tabnew<CR>", { desc = "Создать новый таб" })
+vim.keymap.set("n", "<A-q>", ":tabprevious<CR>", { desc = "Предыдущий таб" })
+vim.keymap.set("n", "<A-e>", ":tabnext<CR>", { desc = "Следующий таб" })
+vim.keymap.set("n", "<A-z>", ":tabclose<CR>", { desc = "Закрыть текущий таб" })
 
 print("BOOM!")

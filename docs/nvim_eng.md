@@ -26,13 +26,21 @@
 | Key | Action |
 |-----|--------|
 | `Ctrl + k` | Exit insert mode |
+| `Esc` | Clear search highlighting |
 | `<leader> + s` | Save file |
 | `<leader> + q` | Close window |
 | `<leader> + e` | Toggle file manager (NvimTree) |
-| `<leader> + f` | Find files (Telescope) |
-| `<leader> + Enter` | Compile C/C++ file |
+| `<leader> + p` | Find files (Telescope) |
 
 > 💡 `<leader>` = spacebar
+
+### Tab Management (Alt + ...)
+| Key | Action |
+|-----|--------|
+| `Alt + t` | Create new tab |
+| `Alt + q` | Go to previous tab |
+| `Alt + e` | Go to next tab |
+| `Alt + z` | Close current tab |
 
 ### LSP (for C/C++ files)
 | Key | Action |
@@ -87,29 +95,6 @@
 
 ---
 
-## 🔧 Compiling C/C++
-
-| Action | Description |
-|--------|-------------|
-| `<leader> + Enter` | Compile current file |
-
-**Compilation process:**
-1. Automatically saves the file
-2. Formats via `clang-format`
-3. Compiles with `-Wall -Wextra` flags
-4. Outputs errors to quickfix window
-5. Auto-opens error list if errors exist
-
-**Compilation commands:**
-| File type | Compiler |
-|-----------|----------|
-| `.c` | `gcc` |
-| `.cpp` | `g++` |
-
-> Executable is created as `{filename}.exe`
-
----
-
 ## 📁 LSP (clangd)
 
 ### Features
@@ -158,7 +143,11 @@ cwd = "${workspaceFolder}"
 |----------|---------|
 | `c` | C syntax highlighting |
 | `cpp` | C++ syntax highlighting |
+| `lua` | Lua syntax highlighting |
+| `vim` / `vimdoc` | Vimscript highlighting |
 | `make` | Makefile highlighting |
+| `bash` | Bash script highlighting |
+| `python` | Python highlighting |
 
 ### Enabled features
 - Syntax highlighting (`highlight = true`)
@@ -174,7 +163,6 @@ cwd = "${workspaceFolder}"
 | clangd | `sudo pacman -S clang` |
 | gdb | `sudo pacman -S gdb` |
 | gcc / g++ | `sudo pacman -S gcc` |
-| clang-format | `sudo pacman -S clang` |
 | git | `sudo pacman -S git` |
 
 ---
@@ -204,8 +192,8 @@ cwd = "${workspaceFolder}"
 ## 💡 Notable Features
 
 - **Transparency**: Neovim background is transparent — Kitty's blurred background shows through
-- **Auto-compilation**: No need to manually type `gcc` commands
-- **Quickfix**: Compilation errors shown in a convenient window
+- **Tab management**: Convenient Alt shortcuts (`Alt+t/q/e/z`)
+- **Quickfix**: Compilation errors shown in a convenient window (if configured)
 - **Built-in debugging**: GDB integration via DAP
 
 ---
@@ -216,3 +204,4 @@ cwd = "${workspaceFolder}"
 - Configure debugging with command-line arguments
 - Add C/C++ snippets (LuaSnip)
 - Enable auto-formatting on save
+- Add C/C++ compilation (can be configured with `<leader> + Enter`)
